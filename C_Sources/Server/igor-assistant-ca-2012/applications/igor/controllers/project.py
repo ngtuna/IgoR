@@ -144,20 +144,7 @@ def format_client_data(projects):
 
 	for project in projects:
 		
-		class_subject = db(db.class_subject.id == project.class_subject).select().first()
 		
-		if class_subject != None:
-			subject = db(db.subject.id == class_subject.subject).select().first()
-			if subject != None:
-				client = dict(
-					
-					projectid 		= project.id,
-					name	        = subject.name,
-					description     = subject.note,
-		        	
-					)
-
-		client_data.append (client)
 
 		#################
 		members_users = db(db.project_member.test == project.id).select()
@@ -180,7 +167,7 @@ def format_client_data(projects):
 					)
 				members.append (member)
 
-		client_data.append (members)
+		#client_data.append (members)
 
 		################
 		project_jobs = db(db.job.test == project.id).select()
@@ -201,8 +188,26 @@ def format_client_data(projects):
 					)
 				jobs.append (job)
 
-		client_data.append (jobs)
+		#client_data.append (jobs)
+		####################
+
+		class_subject = db(db.class_subject.id == project.class_subject).select().first()
+
+		if class_subject != None:
+			subject = db(db.subject.id == class_subject.subject).select().first()
+			if subject != None:
+				client = dict(
+					
+					projectid 	= project.id,
+					name	        = subject.name,
+					description     = subject.note,
+		     			members 	= members,
+		     			jobs 		= jobs   	
+					)
+
+		client_data.append (client)
 
 	return client_data
+
 
 
